@@ -14,12 +14,14 @@ main = Blueprint("main", __name__)
 
 @main.route('/')
 def homepage():
+    """Homepage route"""
     all_stores = GroceryStore.query.all()
     print(all_stores)
     return render_template('home.html', all_stores=all_stores)
 
 @main.route('/new_store', methods=['GET', 'POST'])
 def new_store():
+    """Add a new store"""
     form = GroceryStoreForm()
 
     if form.validate_on_submit():
@@ -37,6 +39,7 @@ def new_store():
 
 @main.route('/new_item', methods=['GET', 'POST'])
 def new_item():
+    """Add new item"""
     form = GroceryItemForm()
 
     if form.validate_on_submit():
@@ -57,6 +60,7 @@ def new_item():
 
 @main.route('/store/<store_id>', methods=['GET', 'POST'])
 def store_detail(store_id):
+    """Store details"""
     store = GroceryStore.query.get(store_id)
     form = GroceryStoreForm(obj=store)
 
@@ -75,6 +79,7 @@ def store_detail(store_id):
 
 @main.route('/item/<item_id>', methods=['GET', 'POST'])
 def item_detail(item_id):
+    """Item details"""
     item = GroceryItem.query.get(item_id)
     form = GroceryItemForm(obj=item)
 
