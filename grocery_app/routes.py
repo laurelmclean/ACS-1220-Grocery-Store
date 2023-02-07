@@ -1,12 +1,11 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
-from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date, datetime
-from grocery_app.models import GroceryStore, GroceryItem, User
+from grocery_app.models import GroceryStore, GroceryItem, User, UserMixin
 from grocery_app.forms import GroceryStoreForm, GroceryItemForm, SignUpForm, LoginForm
-
 # Import app and db from events_app package so that we can run app
 from grocery_app.extensions import app, db
-from grocery_app.__init__ import bcrypt
+from flask_login import login_user, logout_user, current_user, login_required
+from grocery_app import bcrypt
 
 main = Blueprint("main", __name__)
 
@@ -22,6 +21,7 @@ def homepage():
     return render_template('home.html', all_stores=all_stores)
 
 @main.route('/new_store', methods=['GET', 'POST'])
+@login_required
 def new_store():
     """Add a new store"""
     form = GroceryStoreForm()
@@ -30,6 +30,7 @@ def new_store():
         new_store = GroceryStore(
             title=form.title.data,
             address=form.address.data,
+            created_by=current_user
         )
         db.session.add(new_store)
         db.session.commit()
@@ -40,6 +41,7 @@ def new_store():
     return render_template('new_store.html', form=form)
 
 @main.route('/new_item', methods=['GET', 'POST'])
+@login_required
 def new_item():
     """Add new item"""
     form = GroceryItemForm()
@@ -50,7 +52,8 @@ def new_item():
             price=form.price.data,
             category=form.category.data,
             photo_url=form.photo_url.data,
-            store=form.store.data
+            store=form.store.data, 
+            created_by=current_user
         )
         db.session.add(new_item)
         db.session.commit()
@@ -61,6 +64,7 @@ def new_item():
     return render_template('new_item.html', form=form)
 
 @main.route('/store/<store_id>', methods=['GET', 'POST'])
+@login_required
 def store_detail(store_id):
     """Store details"""
     store = GroceryStore.query.get(store_id)
@@ -80,6 +84,7 @@ def store_detail(store_id):
     return render_template('store_detail.html', store=store, form=form)
 
 @main.route('/item/<item_id>', methods=['GET', 'POST'])
+@login_required
 def item_detail(item_id):
     """Item details"""
     item = GroceryItem.query.get(item_id)
@@ -106,10 +111,8 @@ def item_detail(item_id):
 #           Auth Routes                  #
 ##########################################
 
-auth = Blueprint("auth", __name__)
 
-
-@auth.route('/signup', methods=['GET', 'POST'])
+@main.route('/signup', methods=['GET', 'POST'])
 def signup():
     print('in signup')
     form = SignUpForm()
@@ -129,7 +132,7 @@ def signup():
     return render_template('signup.html', form=form)
 
 
-@auth.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -140,7 +143,7 @@ def login():
     return render_template('login.html', form=form)
 
 
-@auth.route('/logout')
+@main.route('/logout')
 @login_required
 def logout():
     logout_user()

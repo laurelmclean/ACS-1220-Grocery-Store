@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, SelectField, SubmitField, FloatField, PasswordField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.validators import DataRequired, Length, URL, ValidationError
 from grocery_app.models import GroceryStore, ItemCategory, User
-from grocery_app.__init__ import bcrypt
+from wtforms.validators import DataRequired, Length, URL, ValidationError
+from grocery_app import bcrypt
 
 class GroceryStoreForm(FlaskForm):
     """Form for adding/updating a GroceryStore."""
@@ -24,7 +24,7 @@ class GroceryItemForm(FlaskForm):
         query_factory=lambda: GroceryStore.query, allow_blank=False)
     submit = SubmitField('Submit')
 
-# forms.py
+# AUTH
 
 
 class SignUpForm(FlaskForm):

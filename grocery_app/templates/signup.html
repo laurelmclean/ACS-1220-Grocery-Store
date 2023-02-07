@@ -6,6 +6,8 @@
 <form action="/signup" method="POST">
     {{ form.csrf_token }}
     <fieldset>
+        <legend>Create your Account</legend>
+
         {{ form.username.label }}
         {{ form.username }}
         <ul>

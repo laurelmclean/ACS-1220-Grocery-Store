@@ -3,7 +3,6 @@ from flask_bcrypt import Bcrypt
 from grocery_app.models import User
 from grocery_app.extensions import app
 
-
 ###########################
 # Authentication
 ###########################
