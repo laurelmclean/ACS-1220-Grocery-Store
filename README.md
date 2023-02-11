@@ -8,6 +8,8 @@ Web app that keeps track of grocery stores and the items they contain. Allows us
 python3 app.py
 ```
 
-# Screenshot:
+# Screenshots:
 
 ![Grocery Store](./grocerystore.png)
+
+![Shopping List](./shoppinglist.png)
