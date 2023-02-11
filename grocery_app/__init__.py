@@ -10,7 +10,7 @@ from grocery_app.extensions import app
 # authentication setup code
 
 login_manager = LoginManager()
-login_manager.login_view = 'auth.login'
+login_manager.login_view = 'main.login'
 login_manager.init_app(app)
 
 # This tells the login manager how to load a user with a particular id
