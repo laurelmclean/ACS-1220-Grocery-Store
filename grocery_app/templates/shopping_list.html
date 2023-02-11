@@ -9,6 +9,9 @@
         <p><strong>{{ item.name }}</strong></p>
     </a>
     <p>Price: ${{ item.price }}</p>
+    <form method="POST" action="/remove_from_shopping_list/{{ item.id }}">
+        <input type="submit" value="Remove from list">
+    </form>
 </div>
 {% endfor %}
 
