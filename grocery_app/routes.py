@@ -107,6 +107,23 @@ def item_detail(item_id):
     return render_template('item_detail.html', item=item, form=form)
 
 
+@main.route('/add_to_shopping_list/<item_id>', methods=['POST'])
+@login_required
+def add_to_shopping_list(item_id):
+    """Add item to user list"""
+    item = GroceryItem.query.get(item_id)
+    current_user.shopping_list_users.append(item)
+    db.session.add(current_user)
+    db.session.commit()
+    flash("Added item to cart")
+    return redirect(url_for('main.shopping_list', item_id=item.id)) 
+
+@main.route('/shopping_list')
+@login_required
+def shopping_list():
+    shopping_list = current_user.shopping_list_users
+    return render_template("shopping_list.html", shopping_list=shopping_list)
+    
 ##########################################
 #           Auth Routes                  #
 ##########################################
@@ -127,7 +144,7 @@ def signup():
         db.session.commit()
         flash('Account Created.')
         print('created')
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('main.login'))
     print(form.errors)
     return render_template('signup.html', form=form)
 
